@@ -37,9 +37,17 @@ export default function App() {
     return { ...widget, positionData: { ...widget.positionData } }
   })
 
-  const [widgetConfig, setWidgetConfig] = useState(() => 
-    JSON.parse(localStorage.getItem("widgetConfig")) || DEFAULT_CONFIG
-  ) //"Lazy state başlatması" ifadesi, React'te useState hook'u kullanırken, başlangıç değerini hesaplamak için bir fonksiyon kullanma yöntemini ifade eder. Bu yöntem, "lazy initialization" olarak da bilinir ve genellikle performans açısından faydalıdır, çünkü başlangıç değeri yalnızca bileşen ilk kez render edildiğinde hesaplanır. Bu, pahalı hesaplamaların veya veri yüklemelerinin sadece gerektiğinde yapılmasını sağlar.
+  const [widgetConfig, setWidgetConfig] = useState(() => {
+    if (typeof window !== "undefined") {
+      // Tarayıcı ortamındayız
+      return JSON.parse(localStorage.getItem("widgetConfig")) || DEFAULT_CONFIG
+    } else {
+      // SSR veya Node.js ortamındayız
+      return DEFAULT_CONFIG;
+    }
+  })
+    
+     //"Lazy state başlatması" ifadesi, React'te useState hook'u kullanırken, başlangıç değerini hesaplamak için bir fonksiyon kullanma yöntemini ifade eder. Bu yöntem, "lazy initialization" olarak da bilinir ve genellikle performans açısından faydalıdır, çünkü başlangıç değeri yalnızca bileşen ilk kez render edildiğinde hesaplanır. Bu, pahalı hesaplamaların veya veri yüklemelerinin sadece gerektiğinde yapılmasını sağlar.
 
 
   const [saveRequested, setSaveRequested] = useState(false)
