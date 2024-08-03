@@ -11,6 +11,15 @@ import Weather from './components/Weather'
 import ConfigMenu from './components/ConfigMenu'
 
 export default function App() {
+
+  const [isClient, setIsClient] = useState(false)
+ 
+  useEffect(() => {
+    setIsClient(true)
+  }, [])
+  //https://nextjs.org/docs/messages/react-hydration-error
+
+
   /* Challenge
 
     Kaydet butonu aslında kullanıcının widget yapılandırmasını kaydetmez. Göreviniz bunu aşağıdaki şekilde düzeltmektir: 
@@ -28,13 +37,17 @@ export default function App() {
     return { ...widget, positionData: { ...widget.positionData } }
   })
 
-  const [widgetConfig, setWidgetConfig] = useState(DEFAULT_CONFIG)
+  const [widgetConfig, setWidgetConfig] = useState(() => 
+    JSON.parse(localStorage.getItem("widgetConfig")) || DEFAULT_CONFIG
+  ) //"Lazy state başlatması" ifadesi, React'te useState hook'u kullanırken, başlangıç değerini hesaplamak için bir fonksiyon kullanma yöntemini ifade eder. Bu yöntem, "lazy initialization" olarak da bilinir ve genellikle performans açısından faydalıdır, çünkü başlangıç değeri yalnızca bileşen ilk kez render edildiğinde hesaplanır. Bu, pahalı hesaplamaların veya veri yüklemelerinin sadece gerektiğinde yapılmasını sağlar.
+
+
   const [saveRequested, setSaveRequested] = useState(false)
 
   function save() {
     setSaveRequested(true) // Aşağıdaki 126. satırda yeşil "Kaydedildi" mesajının oluşturulmasına neden olur. State daha sonra 70. satırdaki setTimeout tarafından tekrar false değerine ayarlanır ve mesaj kaldırılır.
+    localStorage.setItem("widgetConfig", JSON.stringify(widgetConfig)) //useEffect tercih edilmez. https://react.dev/learn/you-might-not-need-an-effect
   }
-
   /****** Kodunuzu yukarıya yazın*******************************************************************  
  
  Challenge'ın çözülmesiyle ilgili tüm kodlar yukarıda yer almaktadır. Bu projede bu kod dışında hiçbir şeyin değiştirilmesine veya incelenmesine gerek yok.
