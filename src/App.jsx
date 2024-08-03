@@ -46,7 +46,9 @@ export default function App() {
       return DEFAULT_CONFIG;
     }
   })
-    
+    // ReferenceError: localStorage is not defined
+    //Bu hata, localStorage nesnesinin tanımlanmadığını belirtiyor. Bu genellikle, localStorage'ın yalnızca tarayıcı ortamında mevcut olması ve server-side rendering (SSR) sırasında veya Node.js ortamında çalışmaması nedeniyle oluşur. Bu hatayı çözmek için, localStorage'ı yalnızca tarayıcıda olduğunuzda kullanmak üzere koşullu bir kontrol eklendi.  
+
      //"Lazy state başlatması" ifadesi, React'te useState hook'u kullanırken, başlangıç değerini hesaplamak için bir fonksiyon kullanma yöntemini ifade eder. Bu yöntem, "lazy initialization" olarak da bilinir ve genellikle performans açısından faydalıdır, çünkü başlangıç değeri yalnızca bileşen ilk kez render edildiğinde hesaplanır. Bu, pahalı hesaplamaların veya veri yüklemelerinin sadece gerektiğinde yapılmasını sağlar.
 
 
